@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace FuzzPhyte.UI
 {
-    #region Data Classes for Checking Stylesheet work
+    #region Data Classes for Checking Style sheet work
     [System.Serializable]
     public class StyleSheetData
     {
@@ -37,6 +37,10 @@ namespace FuzzPhyte.UI
     /// </summary>
     public class FP_UI : MonoBehaviour
     {
+        [Tooltip("Are we using UIElements?")]
+        public bool UseUIElements = true;
+        #region UI Elements Parameters
+        [Header("UI Element Related")]
         [Tooltip("Main UXML Document")]
         public UIDocument Document;
         [Header("UI Related Containers/Buttons")]
@@ -44,7 +48,15 @@ namespace FuzzPhyte.UI
         public StyleSheet DocumentStyleSheet;
         //cached list of styles we've seen so we don't have to utilize the json convert over and over again
         protected List<string>checkedStyles = new List<string>();
+        #endregion
         public virtual void Awake()
+        {
+            if(UseUIElements)
+            {
+                SetupUIElements();
+            }
+        }
+        protected virtual void SetupUIElements()
         {
             if (Document != null)
             {
@@ -66,7 +78,6 @@ namespace FuzzPhyte.UI
                 }
             }
         }
-
         /// <summary>
         /// This applies the style to the container
         /// </summary>
@@ -186,6 +197,28 @@ namespace FuzzPhyte.UI
             Application.Quit();
 #endif
 
+        }
+
+        /// <summary>
+        // Based on generating a ratio tied to a list of some sorts generally 
+        /// </summary>
+        /// <param name="theValue">index in list</param>
+        /// <param name="maxValue">max index/length</param>
+        protected virtual float UIProgressBar(int theValue, int maxValue, int startingValue=0)
+        {
+            var maxRange = (maxValue - startingValue)*1f;
+            if(maxRange<0){
+                Debug.LogError($"Can't handle a negative range {maxValue} - {startingValue} = {maxRange}");
+                return 0;
+            }
+            //float ratioConversation = (1 - ((indexValue + 1) / (_currentDialogue.ConversationData.Count * 1f)));
+            if(startingValue==0)
+            {
+                return 1-((theValue+1) / maxRange);
+            }else
+            {
+                return 1-((theValue + 1 - startingValue) / maxRange);
+            }
         }
     }
 }
