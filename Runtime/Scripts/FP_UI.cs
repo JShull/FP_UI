@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.UIElements;
-
 namespace FuzzPhyte.UI
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+
     #region Data Classes for Checking Style sheet work
     [System.Serializable]
     public class StyleSheetData
