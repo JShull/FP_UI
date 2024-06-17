@@ -204,7 +204,7 @@ namespace FuzzPhyte.UI
         /// </summary>
         /// <param name="theValue">index in list</param>
         /// <param name="maxValue">max index/length</param>
-        protected virtual float UIProgressBar(int theValue, int maxValue, int startingValue=0)
+        protected virtual float UIProgressBar(int theValue, int maxValue, bool reverse=false,int startingValue=0)
         {
             var maxRange = (maxValue - startingValue)*1f;
             if(maxRange<0){
@@ -214,10 +214,19 @@ namespace FuzzPhyte.UI
             //float ratioConversation = (1 - ((indexValue + 1) / (_currentDialogue.ConversationData.Count * 1f)));
             if(startingValue==0)
             {
-                return 1-((theValue+1) / maxRange);
+                if(reverse)
+                {
+                    return 1-((theValue+1) / maxRange);
+                }
+                return (theValue+1) / maxRange;
+                
             }else
             {
-                return 1-((theValue + 1 - startingValue) / maxRange);
+                if(reverse)
+                {
+                    return 1-((theValue + 1 - startingValue) / maxRange);
+                }
+                return (theValue + 1 - startingValue) / maxRange;
             }
         }
     }
