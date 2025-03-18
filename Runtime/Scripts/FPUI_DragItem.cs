@@ -11,6 +11,7 @@ namespace FuzzPhyte.UI
         protected FPUI_Moveable moveable;
         [SerializeField]
         protected bool error=false;
+        public bool DragEnabled = true;
 
         void Awake()
         {
@@ -55,6 +56,7 @@ namespace FuzzPhyte.UI
         public void OnPointerDown(PointerEventData eventData)
         {
             if (error) return;
+            if (!DragEnabled) return;
             Vector2 localPointerPosition;
             
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -71,6 +73,7 @@ namespace FuzzPhyte.UI
         {
           
             if(error) return;
+            if(!DragEnabled) return;
             FPUI_DragDropManager.Instance.EndDrag();
         }
     }

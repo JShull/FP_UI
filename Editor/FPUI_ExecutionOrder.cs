@@ -9,6 +9,7 @@ namespace FuzzPhyte.UI.Editor
         static FPUI_ExecutionOrder()
         {
             SetExecutionOrder(typeof(FuzzPhyte.UI.FPUI_DragDropManager), -25);
+            SetExecutionOrder(typeof(FuzzPhyte.UI.FPUI_MatchManager), -20);
         }
         static void SetExecutionOrder(System.Type scriptType, int order)
         {

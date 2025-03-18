@@ -39,7 +39,7 @@ namespace FuzzPhyte.UI
                 //use original image color as default
                 this.defaultColor = image.color;
             }
-            image.color = defaultColor;
+            image.color = this.defaultColor;
         }
 
         void OnEnable()

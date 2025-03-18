@@ -1,0 +1,18 @@
+{
+    "name": "com.fuzzphyte.ui.samples",
+    "rootNamespace": "FuzzPhyte.UI.Samples",
+    "references": [
+        "com.fuzzphyte.ui",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

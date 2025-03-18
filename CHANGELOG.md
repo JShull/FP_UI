@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-03-18
+
+Drag and Drop Modules have been added for base UnityEngine.UI using UnityEvents and Unity interfaces: IPointerDown, IPointerUp, etc.
+
+### 0.3.0 Added
+
+- [@JShull](https://github.com/jshull)
+  - FPUI_ExecutionOrder.cs
+    - Sets our DragDropManager -25 and our MatchManager -20
+  - FPUI_DragDropManagers.cs
+    - Singleton managing the Drag Drop Events
+  - FPUI_MatchManager.cs
+    - Singletone managing the match based events
+  - FPUI_DragItem.cs
+  - FPUI_HoverHandler.cs
+  - FPUI_MatchItem.cs
+  - FPUI_MatchTarget.cs
+  - FPUI_VisualStateHander.cs
+
+### 0.3.0 Removed
+
 ## [0.2.0] - 2023-11-11
 
 Fixing an issue with zero sized list in stat reporters and accounting for division by zero catches by adjusting the calculators to be a (double, bool) return type to screen against for when we waterfall through different calculations. The false return works it's way up the waterfall.

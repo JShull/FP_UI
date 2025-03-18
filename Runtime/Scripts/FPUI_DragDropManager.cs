@@ -6,6 +6,11 @@ namespace FuzzPhyte.UI
     public class FPUI_DragDropManager : MonoBehaviour
     {
         public static FPUI_DragDropManager Instance { get; private set; }
+        [SerializeField]
+        protected RectTransform currentDragItem;
+        [SerializeField]
+        [Tooltip("Main Canvas of interest")]
+        protected Canvas parentCanvas;
         public bool KeepInBounds;
         [Tooltip("if we want to to manage it at the canvas level")]
         public bool CanvasBounds;
@@ -18,12 +23,13 @@ namespace FuzzPhyte.UI
         public UnityEvent<RectTransform> OnHoverEnter = new UnityEvent<RectTransform>();
         public UnityEvent<RectTransform> OnHoverExit = new UnityEvent<RectTransform>();
 
-        [SerializeField]
-        protected RectTransform currentDragItem;
-        [SerializeField]
-        [Tooltip("Main Canvas of interest")]
-        protected Canvas parentCanvas;
+        /// <summary>
+        /// holds the offset from the mouse pointer to the item
+        /// </summary>
         protected Vector2 offset;
+        /// <summary>
+        /// holds the pixel radius to keep the item within the bounds
+        /// </summary>
         protected float pixelRadius = 10;
 
         public virtual void Awake()
@@ -31,7 +37,7 @@ namespace FuzzPhyte.UI
             if (Instance == null)
             {
                 Instance = this;
-                Debug.LogWarning($"FPUI_DragDropManager instance set to {this.name}");
+                //Debug.LogWarning($"FPUI_DragDropManager instance set to {this.name}");
                 if (parentCanvas == null)
                 {
                     parentCanvas = GetComponentInParent<Canvas>();
@@ -99,7 +105,6 @@ namespace FuzzPhyte.UI
                 //bump it back out towards the center of the canvas by some amount
                 //2D vector back to center to calculate direction to move along 
                 Vector2 direction = (currentPosition - areaCenter).normalized;
-
 
                 // Move the item back towards the center by a fixed amount of pixels
                 Vector2 newPosition = currentPosition - direction * pixelRadius;

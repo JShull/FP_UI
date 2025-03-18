@@ -1,6 +1,6 @@
 {
     "name": "com.fuzzphyte.ui",
-    "version": "0.1.0",
+    "version": "0.3.0",
     "displayName": "FP User Interface",
     "description": "FP UI is a base class for UI Toolkit utilization and contains some useful methods",
     "unity": "2022.3",
@@ -13,12 +13,20 @@
       "url": "https://github.com/jshull/FP_UI.git"
     },
     "dependencies": {
+      "com.unity.textmeshpro": "3.0.9"
     },
     "keywords": [
       "UI",
       "UI Tookit",
       "Analytics",
       "FuzzPhyte"
+    ],
+    "samples": [
+      {
+        "displayName": "UI Samples",
+        "description": "Includes some UI drag and drop samples using standard UnityEngine.UI and PointerOnDown PointerOnUp Interfaces.",
+        "path": "Samples~/SamplesURP"
+      }
     ],
     "author": {
       "name": "John Shull",
