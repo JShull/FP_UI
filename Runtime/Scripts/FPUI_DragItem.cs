@@ -56,7 +56,7 @@ namespace FuzzPhyte.UI
         {
             if (error) return;
             Vector2 localPointerPosition;
-            Debug.Log($"On Pointer Down!");
+            
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 rectTransform,
                 eventData.position,
@@ -69,7 +69,7 @@ namespace FuzzPhyte.UI
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            Debug.Log($"On pointer up");
+          
             if(error) return;
             FPUI_DragDropManager.Instance.EndDrag();
         }

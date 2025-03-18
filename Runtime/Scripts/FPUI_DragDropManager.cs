@@ -12,10 +12,12 @@ namespace FuzzPhyte.UI
         [Tooltip("if we want to manage it at the screen level")]
         public bool ScreenBounds;
         // UI Events for listeners
-        public UnityEvent<RectTransform> OnPickUp = new();
+        public UnityEvent<RectTransform> OnPickUp = new UnityEvent<RectTransform>();
         public UnityEvent<RectTransform> OnDragging = new UnityEvent<RectTransform>();
         public UnityEvent<RectTransform> OnRelease = new UnityEvent<RectTransform>();
-        
+        public UnityEvent<RectTransform> OnHoverEnter = new UnityEvent<RectTransform>();
+        public UnityEvent<RectTransform> OnHoverExit = new UnityEvent<RectTransform>();
+
         [SerializeField]
         protected RectTransform currentDragItem;
         [SerializeField]
@@ -29,6 +31,7 @@ namespace FuzzPhyte.UI
             if (Instance == null)
             {
                 Instance = this;
+                Debug.LogWarning($"FPUI_DragDropManager instance set to {this.name}");
                 if (parentCanvas == null)
                 {
                     parentCanvas = GetComponentInParent<Canvas>();
@@ -37,7 +40,6 @@ namespace FuzzPhyte.UI
                         Debug.LogError("FPUI_DragDropManager needs to be under a Canvas.");
                     }
                 }
-
             }
             else
             {
@@ -63,7 +65,6 @@ namespace FuzzPhyte.UI
                 {
                     BoundsCheck();
                 }
-                
             }
         }
         protected virtual void BoundsCheck()

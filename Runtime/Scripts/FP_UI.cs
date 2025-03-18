@@ -5,7 +5,7 @@ namespace FuzzPhyte.UI
     using UnityEngine;
     using UnityEngine.UIElements;
 
-    #region Data Classes for Checking Style sheet work
+    #region Data Classes for Checking Style sheet work & Interfaces
     [System.Serializable]
     public class StyleSheetData
     {
@@ -30,6 +30,16 @@ namespace FuzzPhyte.UI
         public string m_Value;
         public int m_Type;
     }
+
+    public interface IUIDragState
+    {
+        void OnDragStarted();
+        void OnDragging();
+        void OnDragEnded();
+        void OnHoverEnter();
+        void OnHoverExit();
+    }
+   
     #endregion
     /// <summary>
     /// base class for UI elements for the generic Unity UI Toolkit
