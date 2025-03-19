@@ -9,6 +9,9 @@ namespace FuzzPhyte.UI
     {
         [Tooltip("The ID of the match item that should be matched to this target.")]
         public string ExpectedMatchID;
+        public bool AllowMultipleMatches = false;
+        [Tooltip("If you want to have multiple items that can match this target")]
+        public List<string> AcceptedIDs = new List<string>();
         [Tooltip("Set to false if you want multiple matches to this single target")]
         public bool SingleMatch = true;
         //public bool IsMatched = false;
@@ -25,6 +28,13 @@ namespace FuzzPhyte.UI
                 {
 
                     return false;
+                }
+            }
+            if(AllowMultipleMatches)
+            {
+                if (AcceptedIDs.Contains(matchID))
+                {
+                    return true;
                 }
             }
             //remove white space trailing?
