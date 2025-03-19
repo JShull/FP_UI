@@ -11,11 +11,22 @@ namespace FuzzPhyte.UI
         [SerializeField]
         [Tooltip("Main Canvas of interest")]
         protected Canvas parentCanvas;
+        [Space]
+        [Header("Input Type")]
+        [Tooltip("Using the Mouse")]
+        public bool UseMouse=true;
+        [Tooltip("If we are using a VR OVR Cursor")]
+        public bool UseVRCursor = false;
+        public GameObject VRCursorRef;
+        [Space]
+        [Header("Bounds Checking")]
         public bool KeepInBounds;
         [Tooltip("if we want to to manage it at the canvas level")]
         public bool CanvasBounds;
         [Tooltip("if we want to manage it at the screen level")]
         public bool ScreenBounds;
+        [SerializeField]
+        protected Vector3 cursorPos;
         // UI Events for listeners
         public UnityEvent<RectTransform> OnPickUp = new UnityEvent<RectTransform>();
         public UnityEvent<RectTransform> OnDragging = new UnityEvent<RectTransform>();
@@ -38,6 +49,11 @@ namespace FuzzPhyte.UI
             {
                 Instance = this;
                 //Debug.LogWarning($"FPUI_DragDropManager instance set to {this.name}");
+                if (UseMouse && UseVRCursor)
+                {
+                    Debug.LogError($"Can't use both, make a choice!");
+                    UseVRCursor = false;
+                }
                 if (parentCanvas == null)
                 {
                     parentCanvas = GetComponentInParent<Canvas>();
@@ -51,16 +67,33 @@ namespace FuzzPhyte.UI
             {
                 Destroy(this.gameObject);
             }
+            cursorPos = Vector3.zero;
         }
 
+        public virtual void UpdateCanvas(Canvas canvas)
+        {
+            parentCanvas = canvas;
+        }
         public virtual void Update()
         {
             if (currentDragItem != null)
             {
                 Vector2 movePos;
+                
+                if (UseMouse)
+                {
+                    cursorPos = Input.mousePosition;
+                }
+                else
+                {
+                    if (UseVRCursor)
+                    {
+                        cursorPos=ConvertWorldObjectToCanvasPixelLocation(VRCursorRef);
+                    }
+                }
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     parentCanvas.transform as RectTransform,
-                    Input.mousePosition,
+                    cursorPos,
                     parentCanvas.worldCamera,
                     out movePos);
                 currentDragItem.position = parentCanvas.transform.TransformPoint(movePos - offset);
@@ -72,6 +105,15 @@ namespace FuzzPhyte.UI
                     BoundsCheck();
                 }
             }
+        }
+        /// <summary>
+        /// Designed to take a 3D cursor that's basically hovering right over the canvas and do a quick canvas conversion to get the pixel location
+        /// needs to know the normal to the canvas to do this
+        /// </summary>
+        /// <returns></returns>
+        public virtual Vector3 ConvertWorldObjectToCanvasPixelLocation(GameObject cursorWorld)
+        {
+            return parentCanvas.worldCamera.WorldToScreenPoint(cursorWorld.transform.position, Camera.MonoOrStereoscopicEye.Right);
         }
         protected virtual void BoundsCheck()
         {
