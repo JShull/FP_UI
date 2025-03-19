@@ -5,8 +5,13 @@ namespace FuzzPhyte.UI
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
+    using UnityEngine.UIElements;
+
     public class FPUI_MatchManager : MonoBehaviour
     {
+        /// <summary>
+        /// Make sure script execution order is set so this is behind FPUI_DragDropManager
+        /// </summary>
         public static FPUI_MatchManager Instance { get; private set; }
         public UnityEvent<FPUI_MatchItem, FPUI_MatchTarget> OnMatchSuccess = new UnityEvent<FPUI_MatchItem, FPUI_MatchTarget>();
         public UnityEvent<FPUI_MatchItem> OnMatchFailure = new UnityEvent<FPUI_MatchItem>();
@@ -18,7 +23,8 @@ namespace FuzzPhyte.UI
         [Tooltip("Event System?")]
         protected EventSystem eventSystem;
         private PointerEventData pointerEventData;
-        [SerializeField]
+
+
         
         public virtual void Awake()
         {
@@ -51,7 +57,7 @@ namespace FuzzPhyte.UI
             FPUI_DragDropManager.Instance.OnRelease.RemoveListener(HandleDrop);
             FPUI_DragDropManager.Instance.OnPickUp.RemoveListener(HandlePickUp);
         }
-        public void HandlePickUp(RectTransform draggedItemRT)
+        public virtual void HandlePickUp(RectTransform draggedItemRT)
         {
             var matchItem = draggedItemRT.GetComponent<FPUI_MatchItem>();
             if (matchItem == null) return;
@@ -69,7 +75,7 @@ namespace FuzzPhyte.UI
                 }
             }
         }
-        public void HandleDrop(RectTransform draggedItemRT)
+        public virtual void HandleDrop(RectTransform draggedItemRT)
         {
             var matchItem = draggedItemRT.GetComponent<FPUI_MatchItem>();
             if (matchItem == null)
@@ -77,12 +83,18 @@ namespace FuzzPhyte.UI
                 Debug.Log("Dropped item has no FPUI_MatchItem.");
                 return;
             }
-
             pointerEventData = new PointerEventData(eventSystem)
             {
-                position = Input.mousePosition
+                selectedObject = draggedItemRT.gameObject
             };
-
+            if (FPUI_DragDropManager.Instance.UseMouse)
+            {
+                pointerEventData.position = Input.mousePosition;
+            }
+            if(FPUI_DragDropManager.Instance.UseVRCursor)
+            {
+                pointerEventData.position = FPUI_DragDropManager.Instance.GetCursorPos;
+            }
             var results = new System.Collections.Generic.List<RaycastResult>();
             graphicRaycaster.Raycast(pointerEventData, results);
             //Debug.LogWarning($"Match Manager HandleDrop results: {results.Count}");

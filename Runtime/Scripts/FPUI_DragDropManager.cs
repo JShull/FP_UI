@@ -6,6 +6,9 @@ namespace FuzzPhyte.UI
 
     public class FPUI_DragDropManager : MonoBehaviour
     {
+        /// <summary>
+        /// Make Sure Script Exection order is set so this is before FPUI_MatchManager
+        /// </summary>
         public static FPUI_DragDropManager Instance { get; private set; }
         [SerializeField]
         protected RectTransform currentDragItem;
@@ -28,6 +31,7 @@ namespace FuzzPhyte.UI
         public bool ScreenBounds;
         [SerializeField]
         protected Vector3 cursorPos;
+        public Vector3 GetCursorPos { get { return cursorPos; } }
         // UI Events for listeners
         public UnityEvent<RectTransform> OnPickUp = new UnityEvent<RectTransform>();
         public UnityEvent<PointerEventData> OnPickUpPointer = new UnityEvent<PointerEventData>();
@@ -116,7 +120,7 @@ namespace FuzzPhyte.UI
         /// <returns></returns>
         public virtual Vector3 ConvertWorldObjectToCanvasPixelLocation(GameObject cursorWorld)
         {
-            return parentCanvas.worldCamera.WorldToScreenPoint(cursorWorld.transform.position, Camera.MonoOrStereoscopicEye.Right);
+            return parentCanvas.worldCamera.WorldToScreenPoint(cursorWorld.transform.position);
         }
         protected virtual void BoundsCheck()
         {
