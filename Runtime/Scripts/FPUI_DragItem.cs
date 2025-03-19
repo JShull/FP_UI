@@ -12,6 +12,8 @@ namespace FuzzPhyte.UI
         [SerializeField]
         protected bool error=false;
         public bool DragEnabled = true;
+        [SerializeField]
+        protected bool beingDragged = false;
 
         void Awake()
         {
@@ -57,8 +59,9 @@ namespace FuzzPhyte.UI
         {
             if (error) return;
             if (!DragEnabled) return;
+            if (beingDragged) return;
             Vector2 localPointerPosition;
-            
+           
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 rectTransform,
                 eventData.position,
@@ -66,7 +69,8 @@ namespace FuzzPhyte.UI
                 out localPointerPosition);
             //get my width of the rect transform in pixels
             var width = rectTransform.rect.width;
-            FPUI_DragDropManager.Instance.BeginDrag(rectTransform, localPointerPosition, width);
+            FPUI_DragDropManager.Instance.BeginDrag(eventData,rectTransform, localPointerPosition, width);
+            beingDragged = true;
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -74,7 +78,8 @@ namespace FuzzPhyte.UI
           
             if(error) return;
             if(!DragEnabled) return;
-            FPUI_DragDropManager.Instance.EndDrag();
+            FPUI_DragDropManager.Instance.EndDrag(eventData);
+            beingDragged = false;
         }
     }
 }

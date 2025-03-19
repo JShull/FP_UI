@@ -2,6 +2,7 @@ namespace FuzzPhyte.UI
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using UnityEngine.EventSystems;
 
     public class FPUI_DragDropManager : MonoBehaviour
     {
@@ -29,8 +30,10 @@ namespace FuzzPhyte.UI
         protected Vector3 cursorPos;
         // UI Events for listeners
         public UnityEvent<RectTransform> OnPickUp = new UnityEvent<RectTransform>();
+        public UnityEvent<PointerEventData> OnPickUpPointer = new UnityEvent<PointerEventData>();
         public UnityEvent<RectTransform> OnDragging = new UnityEvent<RectTransform>();
         public UnityEvent<RectTransform> OnRelease = new UnityEvent<RectTransform>();
+        public UnityEvent<PointerEventData> OnReleasePointer = new UnityEvent<PointerEventData>();
         public UnityEvent<RectTransform> OnHoverEnter = new UnityEvent<RectTransform>();
         public UnityEvent<RectTransform> OnHoverExit = new UnityEvent<RectTransform>();
 
@@ -159,19 +162,25 @@ namespace FuzzPhyte.UI
                 EndDrag();
             }
         }
-        public void BeginDrag(RectTransform item, Vector2 pointerOffset, float pixelSize=50)
+        public void BeginDrag(PointerEventData pointerData,RectTransform item, Vector2 pointerOffset, float pixelSize=50)
         {
             currentDragItem = item;
             pixelRadius = pixelSize;
             offset = pointerOffset;
             OnPickUp?.Invoke(item);
+            OnPickUpPointer?.Invoke(pointerData);
         }
+        
 
-        public void EndDrag()
+        public void EndDrag(PointerEventData pointerData=null)
         {
             if (currentDragItem != null)
             {
                 OnRelease?.Invoke(currentDragItem);
+                if (pointerData != null)
+                {
+                    OnReleasePointer?.Invoke(pointerData);
+                }
                 currentDragItem = null;
             }
         }
