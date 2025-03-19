@@ -162,7 +162,7 @@ namespace FuzzPhyte.UI
                 EndDrag();
             }
         }
-        public void BeginDrag(PointerEventData pointerData,RectTransform item, Vector2 pointerOffset, float pixelSize=50)
+        public virtual void BeginDrag(PointerEventData pointerData,RectTransform item, Vector2 pointerOffset, float pixelSize=50)
         {
             currentDragItem = item;
             pixelRadius = pixelSize;
@@ -172,7 +172,7 @@ namespace FuzzPhyte.UI
         }
         
 
-        public void EndDrag(PointerEventData pointerData=null)
+        public virtual void EndDrag(PointerEventData pointerData=null)
         {
             if (currentDragItem != null)
             {
