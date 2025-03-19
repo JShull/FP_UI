@@ -2,7 +2,7 @@
 namespace FuzzPhyte.UI
 {
     using UnityEngine;
-
+    using UnityEngine.Events;
     using System.Collections.Generic;
     [RequireComponent(typeof(RectTransform))]
     public class FPUI_MatchTarget : MonoBehaviour
@@ -18,7 +18,8 @@ namespace FuzzPhyte.UI
         [Tooltip("Vector3 data for use later as needed for other alignment")]
         public Vector3 LocalOriginMatchPosition;
         public List<FPUI_MatchItem> CurrentMatchItems = new List<FPUI_MatchItem>();
-
+        public UnityEvent OnMatchSuccessLocalEvent;
+        public UnityEvent OnRemoveMatchLocalEvent;
         public virtual bool IsMatch(string matchID)
         {
             if (SingleMatch)
@@ -26,7 +27,6 @@ namespace FuzzPhyte.UI
                 //already have a match
                 if (CurrentMatchItems.Count > 0)
                 {
-
                     return false;
                 }
             }
@@ -47,13 +47,15 @@ namespace FuzzPhyte.UI
         {
             if(!CurrentMatchItems.Contains(item))
             {
-               CurrentMatchItems.Add(item);
+                OnMatchSuccessLocalEvent.Invoke();
+                CurrentMatchItems.Add(item);
             }
         }
         public void RemoveMatchedItem(FPUI_MatchItem item)
         {
             if(CurrentMatchItems.Contains(item))
             {
+                OnRemoveMatchLocalEvent.Invoke();
                 CurrentMatchItems.Remove(item);
             }
         }
