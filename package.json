@@ -13,7 +13,9 @@
       "url": "https://github.com/jshull/FP_UI.git"
     },
     "dependencies": {
-      "com.unity.textmeshpro": "3.0.9"
+      "com.unity.textmeshpro": "3.0.9",
+      "com.unity.ugui":"2.0.0",
+      "com.unity.inputsystem":"1.11.2"
     },
     "keywords": [
       "UI",
