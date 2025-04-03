@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b3a57c9f0cc3448b60db27a3154d89, type: 3}
+  m_Name: OverlayInstructions_Box_4AR
+  m_EditorClassIdentifier: 
+  Theme: {fileID: 11400000, guid: dcf4fe68e5af17746ab7d2d17d13c208, type: 2}
+  TextBox: 'Use AR To
+
+    Find Things!'
+  FontSize: 30
+  FontMax: 48
+  FontMin: 10
+  TextBoxAlignment: 514
+  ButtonPosition: 7
+  TextBoxFontStyle: 3
+  BottomLeftPt: {x: 0.775, y: 0.55}
+  TopRightPt: {x: 0.975, y: 0.65}
+  OutlineThickness: 1
+  UseText: 1
+  UseImage: 0
+  UseOutline: 1
+  UseScaleFont: 1
