@@ -104,7 +104,7 @@ namespace FuzzPhyte.UI.Camera
             // Keyboard movement (WASD or Arrow keys)
             Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             MoveCamera(move);
-            Debug.Log("Move: " + move);
+            //Debug.Log("Move: " + move);
 
             // Mouse rotation
             if (Input.GetMouseButton(1)) // Right-click to rotate
