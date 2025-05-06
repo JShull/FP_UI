@@ -1,11 +1,9 @@
 namespace FuzzPhyte.UI
 {
-    using UnityEditor.PackageManager;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
-    using UnityEngine.UIElements;
 
     public class FPUI_MatchManager : MonoBehaviour
     {
