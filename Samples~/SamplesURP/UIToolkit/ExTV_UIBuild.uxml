@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/FP_UI/Samples/SamplesURP/UIToolkit/EXStyleSheet.uss?fileID=7433441132597879392&amp;guid=54730281370f14e71b13890169f04659&amp;type=3#EXStyleSheet" />
+    <ui:VisualElement name="Root" style="flex-grow: 1;" />
+</ui:UXML>

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdef85da823f64de5a55cafac1849195, type: 3}
+  m_Name: EXStyleSheet
+  m_EditorClassIdentifier: 
+  BackgroundColor: {r: 0.1333333, g: 0.5450981, b: 0.1333333, a: 1}
+  FillColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+  TextColor: {r: 0, g: 0, b: 0, a: 1}
+  BorderColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  CornerRadius: 5
+  BorderThickness: 20
+  Padding: 5
+  Font: {fileID: 12800000, guid: fe459f116231040cbbbf635dd362a625, type: 3}
+  FontSize: 20
+  MinFontSize: 12
+  MaxFontSize: 36
+  UseAutoSizing: 0
+  FontWeight: 1
+  FontAlignment: 4
+  StyleTag: Green

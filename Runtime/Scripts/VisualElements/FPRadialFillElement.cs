@@ -36,14 +36,10 @@ namespace FuzzPhyte.UI.Toolkit
         {
             if (styleData == null) return;
 
-            if (styleData.BackgroundColor.HasValue)
-                backgroundColor = styleData.BackgroundColor.Value;
-
-            if (styleData.FillColor.HasValue)
-                fillColor = styleData.FillColor.Value;
-
-            if (styleData.CornerRadius.HasValue)
-                Radius = styleData.CornerRadius.Value;
+            
+            backgroundColor = styleData.BackgroundColor;
+            fillColor = styleData.FillColor;
+            Radius = styleData.CornerRadius;
 
             style.width = Radius * 2f;
             style.height = Radius * 2f;

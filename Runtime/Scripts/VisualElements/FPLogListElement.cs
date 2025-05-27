@@ -64,60 +64,46 @@ namespace FuzzPhyte.UI
             if (styleData == null) return;
 
             // Container styles
-            if (styleData.BackgroundColor.HasValue)
-                style.backgroundColor = styleData.BackgroundColor.Value;
+        
+            style.backgroundColor = styleData.BackgroundColor;
 
-            if (styleData.CornerRadius.HasValue)
-            {
-                style.borderTopLeftRadius = styleData.CornerRadius.Value;
-                style.borderTopRightRadius = styleData.CornerRadius.Value;
-                style.borderBottomLeftRadius = styleData.CornerRadius.Value;
-                style.borderBottomRightRadius = styleData.CornerRadius.Value;
-            }
+            style.borderTopLeftRadius = styleData.CornerRadius;
+            style.borderTopRightRadius = styleData.CornerRadius;
+            style.borderBottomLeftRadius = styleData.CornerRadius;
+            style.borderBottomRightRadius = styleData.CornerRadius;
 
-            if (styleData.Padding.HasValue)
-            {
-                style.paddingLeft = styleData.Padding.Value;
-                style.paddingRight = styleData.Padding.Value;
-                style.paddingTop = styleData.Padding.Value;
-                style.paddingBottom = styleData.Padding.Value;
-            }
+            style.paddingLeft = styleData.Padding;
+            style.paddingRight = styleData.Padding;
+            style.paddingTop = styleData.Padding;
+            style.paddingBottom = styleData.Padding;
 
-            if (styleData.BorderThickness.HasValue)
-            {
-                style.borderTopWidth = styleData.BorderThickness.Value;
-                style.borderRightWidth = styleData.BorderThickness.Value;
-                style.borderBottomWidth = styleData.BorderThickness.Value;
-                style.borderLeftWidth = styleData.BorderThickness.Value;
-            }
-
-            if (styleData.BorderColor.HasValue)
-            {
-                style.borderTopColor = styleData.BorderColor.Value;
-                style.borderRightColor = styleData.BorderColor.Value;
-                style.borderBottomColor = styleData.BorderColor.Value;
-                style.borderLeftColor = styleData.BorderColor.Value;
-            }
+            style.borderTopWidth = styleData.BorderThickness;
+            style.borderRightWidth = styleData.BorderThickness;
+            style.borderBottomWidth = styleData.BorderThickness;
+            style.borderLeftWidth = styleData.BorderThickness;
+        
+            style.borderTopColor = styleData.BorderColor;
+            style.borderRightColor = styleData.BorderColor;
+            style.borderBottomColor = styleData.BorderColor;
+            style.borderLeftColor = styleData.BorderColor;
+            
 
             // Update text styles for log entries
             foreach (var child in scrollView.Children())
             {
                 if (child is Label label)
                 {
-                    if (styleData.TextColor.HasValue)
-                        label.style.color = styleData.TextColor.Value;
+                   
+                    label.style.color = styleData.TextColor;
 
                     if (styleData.Font != null)
+                    {
                         label.style.unityFont = styleData.Font;
-
-                    if (styleData.FontSize.HasValue)
-                        label.style.fontSize = styleData.FontSize.Value;
-
-                    if (styleData.FontWeight.HasValue)
-                        label.style.unityFontStyleAndWeight = styleData.FontWeight.Value;
-
-                    if (styleData.FontAlignment.HasValue)
-                        label.style.unityTextAlign = styleData.FontAlignment.Value;
+                    }
+                        
+                    label.style.fontSize = styleData.FontSize;
+                    label.style.unityFontStyleAndWeight = styleData.FontWeight;
+                    label.style.unityTextAlign = styleData.FontAlignment;
                 }
             }
             MarkDirtyRepaint();

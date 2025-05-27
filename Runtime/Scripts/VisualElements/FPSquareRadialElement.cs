@@ -166,18 +166,12 @@ namespace FuzzPhyte.UI.Toolkit
         {
             if (styleData == null) return;
 
-            if (styleData.FillColor.HasValue)
-                endColor = styleData.FillColor.Value;
-
-            if (styleData.BackgroundColor.HasValue)
-                startColor = styleData.BackgroundColor.Value;
-
-            if (styleData.CornerRadius.HasValue)
-            {
-                OuterSize = styleData.CornerRadius.Value;
-                style.width = OuterSize;
-                style.height = OuterSize;
-            }
+            endColor = styleData.FillColor;
+            startColor = styleData.BackgroundColor;
+            OuterSize = styleData.CornerRadius;
+            style.width = OuterSize;
+            style.height = OuterSize;
+            
 
             MarkDirtyRepaint();
         }

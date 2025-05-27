@@ -63,13 +63,13 @@ namespace FuzzPhyte.UI
         }
         public static int CalculateFontSize(FPUITStyleData styleData, float containerHeight)
         {
-            if (styleData.UseAutoSizing.HasValue && styleData.UseAutoSizing.Value)
+            if (styleData.UseAutoSizing)
             {
-                int min = styleData.MinFontSize ?? 10;
-                int max = styleData.MaxFontSize ?? 30;
+                int min = styleData.MinFontSize;
+                int max = styleData.MaxFontSize;
                 return Mathf.Clamp(Mathf.RoundToInt(containerHeight * 0.1f), min, max);
             }
-            return styleData.FontSize ?? 14;
+            return styleData.FontSize;
         }
     }
     #region Interfaces for UIToolkit
