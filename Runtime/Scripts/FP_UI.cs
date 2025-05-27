@@ -39,7 +39,7 @@ namespace FuzzPhyte.UI
         void OnHoverEnter();
         void OnHoverExit();
     }
-   
+
     #endregion
     /// <summary>
     /// base class for UI elements for the generic Unity UI Toolkit
@@ -57,11 +57,11 @@ namespace FuzzPhyte.UI
         public VisualElement RootContainer;
         public StyleSheet DocumentStyleSheet;
         //cached list of styles we've seen so we don't have to utilize the json convert over and over again
-        protected List<string>checkedStyles = new List<string>();
+        protected List<string> checkedStyles = new List<string>();
         #endregion
         public virtual void Awake()
         {
-            if(UseUIElements)
+            if (UseUIElements)
             {
                 SetupUIElements();
             }
@@ -164,7 +164,7 @@ namespace FuzzPhyte.UI
         /// <param name="issueTitle">title for the issue</param>
         /// <param name="versionValue">version of your game</param>
 
-        protected virtual void UIQuitGitHubURL(string gitHubURL, string assignee, string[] labels, string template, string projectBoardName,string issueTitle, string versionValue)
+        protected virtual void UIQuitGitHubURL(string gitHubURL, string assignee, string[] labels, string template, string projectBoardName, string issueTitle, string versionValue)
         {
             var systemInfo = SystemInfo.operatingSystem;
             if (!template.Contains(".md"))
@@ -183,7 +183,7 @@ namespace FuzzPhyte.UI
 
             var gitRoot = string.Concat(gitHubURL, @"/issues/new?assignees=", assignee, "&labels=");
             var gitLabels = string.Join(",", labels);
-            gitRoot = string.Concat(gitRoot, gitLabels, @"&projects=", projectBoardName, @"&template=", template,@"&title=%5B",issueTitle,"_",versionValue,"_",systemInfo,@"%5D");
+            gitRoot = string.Concat(gitRoot, gitLabels, @"&projects=", projectBoardName, @"&template=", template, @"&title=%5B", issueTitle, "_", versionValue, "_", systemInfo, @"%5D");
 
             Debug.Log($"Opening an external link to...{gitRoot}");
             //var stringURL = gitHubURL+ versionValue + "_" + systemInfo + "%5D";
@@ -214,29 +214,42 @@ namespace FuzzPhyte.UI
         /// </summary>
         /// <param name="theValue">index in list</param>
         /// <param name="maxValue">max index/length</param>
-        protected virtual float UIProgressBar(int theValue, int maxValue, bool reverse=false,int startingValue=0)
+        protected virtual float UIProgressBar(int theValue, int maxValue, bool reverse = false, int startingValue = 0)
         {
-            var maxRange = (maxValue - startingValue)*1f;
-            if(maxRange<0){
+            var maxRange = (maxValue - startingValue) * 1f;
+            if (maxRange < 0)
+            {
                 Debug.LogError($"Can't handle a negative range {maxValue} - {startingValue} = {maxRange}");
                 return 0;
             }
             //float ratioConversation = (1 - ((indexValue + 1) / (_currentDialogue.ConversationData.Count * 1f)));
-            if(startingValue==0)
+            if (startingValue == 0)
             {
-                if(reverse)
+                if (reverse)
                 {
-                    return 1-((theValue+1) / maxRange);
+                    return 1 - ((theValue + 1) / maxRange);
                 }
-                return (theValue+1) / maxRange;
-                
-            }else
+                return (theValue + 1) / maxRange;
+
+            }
+            else
             {
-                if(reverse)
+                if (reverse)
                 {
-                    return 1-((theValue + 1 - startingValue) / maxRange);
+                    return 1 - ((theValue + 1 - startingValue) / maxRange);
                 }
                 return (theValue + 1 - startingValue) / maxRange;
+            }
+        }
+
+        protected virtual void ApplyOneStyleToAll(FPUITStyleData styleData, IEnumerable<VisualElement> elements)
+        {
+            foreach (var element in elements)
+            {
+                if (element is IFPStyleReceiver receiver)
+                {
+                    receiver.ApplyFPStyle(styleData);
+                }
             }
         }
     }
