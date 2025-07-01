@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-07-01
+
+### 0.4.0 Added
+
+- [@JShull](https://github.com/jshull)
+  - Support for FP_Installer (no dependency)
+
 ## [0.3.0] - 2025-03-18
 
 Drag and Drop Modules have been added for base UnityEngine.UI using UnityEvents and Unity interfaces: IPointerDown, IPointerUp, etc.
