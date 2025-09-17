@@ -61,8 +61,10 @@ namespace FuzzPhyte.UI
         #endregion
         public virtual void Awake()
         {
+            //Debug.Log($"UseUIElements: {UseUIElements}");
             if (UseUIElements)
             {
+
                 SetupUIElements();
             }
         }
