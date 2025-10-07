@@ -1,5 +1,6 @@
 namespace FuzzPhyte.UI
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
@@ -12,6 +13,9 @@ namespace FuzzPhyte.UI
         public static FPUI_DragDropManager Instance { get; private set; }
         [SerializeField]
         protected RectTransform currentDragItem;
+        //will clear this list after a frameclearcheck number of frames
+        protected List<RectTransform> draggedItems = new List<RectTransform>();
+        protected int frameClearCheck = 20; 
         [SerializeField]
         [Tooltip("Main Canvas of interest")]
         protected Canvas parentCanvas;
@@ -29,6 +33,9 @@ namespace FuzzPhyte.UI
         public bool CanvasBounds;
         [Tooltip("if we want to manage it at the screen level")]
         public bool ScreenBounds;
+        [Space]
+        [Tooltip("If we want to use lateupdate to make a second pass")]
+        public bool UseLateUpdateCheckBounds = false;
         [SerializeField]
         protected Vector3 cursorPos;
         public Vector3 GetCursorPos { get { return cursorPos; } }
@@ -109,7 +116,29 @@ namespace FuzzPhyte.UI
                 //check if we are out of the screen bounds
                 if (KeepInBounds)
                 {
-                    BoundsCheck();
+                    BoundsCheck(currentDragItem);
+                }
+            }
+        }
+        public virtual void LateUpdate()
+        {
+            if (!UseLateUpdateCheckBounds)
+            {
+                return;
+            }
+            if (KeepInBounds && Time.frameCount % frameClearCheck == 0)
+            {
+                foreach (var item in draggedItems)
+                {
+                    if (item != null)
+                    {
+                        BoundsCheck(item);
+                    }
+                }
+                //remove all but the last one
+                if (draggedItems.Count > 1)
+                {
+                    draggedItems.RemoveRange(0, draggedItems.Count - 1);
                 }
             }
         }
@@ -122,13 +151,13 @@ namespace FuzzPhyte.UI
         {
             return parentCanvas.worldCamera.WorldToScreenPoint(cursorWorld.transform.position);
         }
-        protected virtual void BoundsCheck()
+        protected virtual void BoundsCheck(RectTransform theItem)
         {
             ///establish corners given current canvas size - it might be live adusting so we need to keep getting this
             Vector2 lowerBounds=Vector2.zero;
             Vector2 upperBounds=Vector2.zero;
             Vector2 areaCenter=Vector2.zero;
-            Vector2 currentPosition = currentDragItem.position;
+            Vector2 currentPosition = theItem.position;
 
             if (CanvasBounds)
             {
@@ -147,8 +176,8 @@ namespace FuzzPhyte.UI
             }
             
 
-            if (currentDragItem.position.x < lowerBounds.x || currentDragItem.position.y < lowerBounds.y ||
-                    currentDragItem.position.x > upperBounds.x || currentDragItem.position.y > upperBounds.y)
+            if (theItem.position.x < lowerBounds.x || theItem.position.y < lowerBounds.y ||
+                    theItem.position.x > upperBounds.x || theItem.position.y > upperBounds.y)
             {
 
                 //bump it back out towards the center of the canvas by some amount
@@ -161,18 +190,22 @@ namespace FuzzPhyte.UI
                 // Ensure the new position is within screen bounds
                 newPosition.x = Mathf.Clamp(newPosition.x, lowerBounds.x, upperBounds.x);
                 newPosition.y = Mathf.Clamp(newPosition.y, lowerBounds.x, upperBounds.y);
-                currentDragItem.position = newPosition;
+                theItem.position = newPosition;
                 
                 EndDrag();
             }
         }
-        public virtual void BeginDrag(PointerEventData pointerData,RectTransform item, Vector2 pointerOffset, float pixelSize=50)
+        public virtual void BeginDrag(PointerEventData pointerData, RectTransform item, Vector2 pointerOffset, float pixelSize = 50)
         {
             currentDragItem = item;
             pixelRadius = pixelSize;
             offset = pointerOffset;
             OnPickUp?.Invoke(item);
             OnPickUpPointer?.Invoke(pointerData);
+            if(!draggedItems.Contains(item))
+            {
+                draggedItems.Add(item);
+            }
         }
         
 

@@ -14,7 +14,8 @@ namespace FuzzPhyte.UI
         public UnityEvent<FPUI_MatchItem, FPUI_MatchTarget> OnMatchSuccess = new UnityEvent<FPUI_MatchItem, FPUI_MatchTarget>();
         public UnityEvent<FPUI_MatchItem> OnMatchFailure = new UnityEvent<FPUI_MatchItem>();
         public UnityEvent<FPUI_MatchItem,FPUI_MatchTarget> OnMatchRemoved = new UnityEvent<FPUI_MatchItem, FPUI_MatchTarget>();
-
+        // when we want to notify of any match added (success or failure)
+        public UnityEvent<FPUI_MatchItem,FPUI_MatchTarget> OnMatchAdded = new UnityEvent<FPUI_MatchItem, FPUI_MatchTarget>();
         [SerializeField]
         [Tooltip("Canvas Raycaster?")]
         protected GraphicRaycaster graphicRaycaster;
@@ -65,6 +66,7 @@ namespace FuzzPhyte.UI
             for (int i = 0; i < previousTargets.Length; i++)
             { 
                 var target = previousTargets[i];
+                target.RemoveItemHere(matchItem);
                 if (target.CurrentMatchItems.Contains(matchItem))
                 {
                     target.RemoveMatchedItem(matchItem);
@@ -102,11 +104,14 @@ namespace FuzzPhyte.UI
                 if (matchTarget != null)
                 {
                     //Debug.LogWarning($"Match? : {matchItem.MatchID} = {matchTarget.ExpectedMatchID} ?");
+                    matchTarget.AddItemHere(matchItem);
+                    OnMatchAdded?.Invoke(matchItem, matchTarget);
+                    
                     if (matchTarget.IsMatch(matchItem.MatchID))
                     {
                         matchTarget.SetMatchedItem(matchItem);
                         OnMatchSuccess?.Invoke(matchItem, matchTarget);
-                        
+
                         return;
                     }
                 }

@@ -2,7 +2,8 @@
     "name": "com.fuzzphyte.ui.samples",
     "rootNamespace": "",
     "references": [
-        "com.fuzzphyte.ui"
+        "com.fuzzphyte.ui",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

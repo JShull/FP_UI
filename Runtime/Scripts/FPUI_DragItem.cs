@@ -2,7 +2,7 @@ namespace FuzzPhyte.UI
 {
     using UnityEngine;
     using UnityEngine.EventSystems;
-
+    using UnityEngine.Events;
     public class FPUI_DragItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField]
@@ -14,6 +14,8 @@ namespace FuzzPhyte.UI
         public bool DragEnabled = true;
         [SerializeField]
         protected bool beingDragged = false;
+        public UnityEvent OnMouseDownEvent;
+        public UnityEvent OnMouseUpEvent;
 
         void Awake()
         {
@@ -61,7 +63,7 @@ namespace FuzzPhyte.UI
             if (!DragEnabled) return;
             if (beingDragged) return;
             Vector2 localPointerPosition;
-           
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 rectTransform,
                 eventData.position,
@@ -69,17 +71,18 @@ namespace FuzzPhyte.UI
                 out localPointerPosition);
             //get my width of the rect transform in pixels
             var width = rectTransform.rect.width;
-            FPUI_DragDropManager.Instance.BeginDrag(eventData,rectTransform, localPointerPosition, width);
+            FPUI_DragDropManager.Instance.BeginDrag(eventData, rectTransform, localPointerPosition, width);
             beingDragged = true;
+            OnMouseDownEvent?.Invoke();
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-          
-            if(error) return;
-            if(!DragEnabled) return;
+            if (error) return;
+            if (!DragEnabled) return;
             FPUI_DragDropManager.Instance.EndDrag(eventData);
             beingDragged = false;
+            OnMouseUpEvent?.Invoke();
         }
     }
 }

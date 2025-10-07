@@ -18,6 +18,7 @@ namespace FuzzPhyte.UI
         [Tooltip("Vector3 data for use later as needed for other alignment")]
         public Vector3 LocalOriginMatchPosition;
         public List<FPUI_MatchItem> CurrentMatchItems = new List<FPUI_MatchItem>();
+        public List<FPUI_MatchItem> AllItemsHere = new List<FPUI_MatchItem>();
         public UnityEvent OnMatchSuccessLocalEvent;
         public UnityEvent OnRemoveMatchLocalEvent;
         public virtual bool IsMatch(string matchID)
@@ -45,15 +46,34 @@ namespace FuzzPhyte.UI
         }
         public void SetMatchedItem(FPUI_MatchItem item)
         {
-            if(!CurrentMatchItems.Contains(item))
+            
+            if (!CurrentMatchItems.Contains(item))
             {
                 OnMatchSuccessLocalEvent.Invoke();
                 CurrentMatchItems.Add(item);
             }
         }
+        public void AddItemHere(FPUI_MatchItem item)
+        {
+            if (!AllItemsHere.Contains(item))
+            {
+                AllItemsHere.Add(item);
+            }
+        }
+        public void RemoveItemHere(FPUI_MatchItem item)
+        {
+            if (AllItemsHere.Contains(item))
+            {
+                AllItemsHere.Remove(item);
+            }
+        }
         public void RemoveMatchedItem(FPUI_MatchItem item)
         {
-            if(CurrentMatchItems.Contains(item))
+            if (AllItemsHere.Contains(item))
+            {
+                AllItemsHere.Remove(item);
+            }
+            if (CurrentMatchItems.Contains(item))
             {
                 OnRemoveMatchLocalEvent.Invoke();
                 CurrentMatchItems.Remove(item);
