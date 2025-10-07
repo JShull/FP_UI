@@ -18,6 +18,7 @@ namespace FuzzPhyte.UI.Samples
         [Header("Running Counts")]
         public int RunningMatchScore = 0;
         public int RunningMatchFailure = 0;
+        public bool UseRepeat = false;
         public void OnEnable()
         {
             FPUI_MatchManager.Instance.OnMatchSuccess.AddListener(HandleMatchSuccess);
@@ -87,6 +88,10 @@ namespace FuzzPhyte.UI.Samples
             Debug.Log($"Match Added! {item.name} to {target.name}");
             float delayTime = 0.1f;
             //float padding = 2.25f;
+            if (!UseRepeat)
+            {
+                return;
+            }
             for (int i = 0; i < target.AllItemsHere.Count; i++)
             {
                 var stackedItem = target.AllItemsHere[i];
