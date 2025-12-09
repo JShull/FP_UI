@@ -1,12 +1,14 @@
-using UnityEngine;
-using UnityEngine.UIElements;
-
 namespace FuzzPhyte.UI.Toolkit
 {
+    using UnityEngine;
+    using UnityEngine.UIElements;
+
     public class FPSquareRadialElement : VisualElement,IFPStyleReceiver
     {
         [Range(0f, 1f)]
-        [SerializeField]protected float progress { get; set; } = 0f; // 0 to 1
+        [SerializeField]
+        protected float progress = 0f; // 0 to 1
+        public float Progress { get { return progress;} set {progress=value;}}
         public float OuterSize { get; set; } = 100f;
         public float InnerSize { get; set; } = 80f;
 
