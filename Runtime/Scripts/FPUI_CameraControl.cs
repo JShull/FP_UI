@@ -124,26 +124,26 @@ namespace FuzzPhyte.UI.Camera
 
             Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began)
+            if (touch.phase == UnityEngine.TouchPhase.Began)
             {
                 isTouching = true;
                 initialTouchPos = touch.position;
             }
 
-            if (touch.phase == TouchPhase.Moved && isTouching)
+            if (touch.phase == UnityEngine.TouchPhase.Moved && isTouching)
             {
                 Vector2 delta = touch.position - initialTouchPos;
                 RotateCamera(delta.x, 0);
                 initialTouchPos = touch.position;
             }
 
-            if (Input.touchCount == 2 && touch.phase == TouchPhase.Stationary)
+            if (Input.touchCount == 2 && touch.phase == UnityEngine.TouchPhase.Stationary)
                 MoveCamera(Vector3.forward);
 
-            if (Input.touchCount == 3 && touch.phase == TouchPhase.Stationary)
+            if (Input.touchCount == 3 && touch.phase == UnityEngine.TouchPhase.Stationary)
                 MoveCamera(Vector3.back);
 
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            if (touch.phase == UnityEngine.TouchPhase.Ended || touch.phase == UnityEngine.TouchPhase.Canceled)
                 isTouching = false;
         }
 #endif
