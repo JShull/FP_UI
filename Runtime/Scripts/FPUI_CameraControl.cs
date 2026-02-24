@@ -2,20 +2,25 @@ namespace FuzzPhyte.UI.Camera
 {
     using UnityEngine;
 
-    public class FPUI_CameraControl:MonoBehaviour
+#if ENABLE_INPUT_SYSTEM
+    using UnityEngine.InputSystem;
+#endif
+
+    public class FPUI_CameraControl : MonoBehaviour
     {
         [Header("Should be the parent item we are controlling")]
         public Transform LocalTransform;
-        public float movementSpeed = 10f; // Speed for moving forward/backward
-        public float rotationSpeed = 15f; // Speed for rotating the camera
-        public float dragSpeed = 0.1f; // Sensitivity for drag rotation
+        public float movementSpeed = 10f;
+        public float rotationSpeed = 15f;
+        public float dragSpeed = 0.1f;
 
-        private bool isTouching = false; // Is the player holding the screen?
+        private bool isTouching = false;
         private Vector2 initialTouchPos;
-        
+
         public Camera mainCamera;
         [SerializeField] private bool setup;
         [SerializeField] private bool useTouch;
+
         public virtual void Setup(Camera userSpecifiedCamera, bool client)
         {
             if (!client)
@@ -23,9 +28,12 @@ namespace FuzzPhyte.UI.Camera
                 Destroy(this);
                 return;
             }
+
             mainCamera = userSpecifiedCamera;
             mainCamera.enabled = true;
-            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+
+            if (Application.platform == RuntimePlatform.Android ||
+                Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 useTouch = true;
             }
@@ -36,120 +44,194 @@ namespace FuzzPhyte.UI.Camera
 
             setup = true;
         }
-        
 
-        // Update is called once per frame
         public virtual void Update()
         {
-            if (!setup)
-            {
-                return;
-            }
-            // Platform specific controls
+            if (!setup) return;
+
             if (useTouch)
-            {
                 HandleTouchInput();
-            }
             else
-            {
                 HandleMouseKeyboardInput();
-            }
         }
 
-        // Handles touch input for mobile devices
+        #region TOUCH INPUT
+
         public virtual void HandleTouchInput()
         {
-            if (Input.touchCount > 0)
-            {
-                Debug.Log($"Touch Detected!");
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    isTouching = true;
-                    initialTouchPos = touch.position;
-                }
-
-                if (touch.phase == TouchPhase.Moved && isTouching)
-                {
-                    Vector2 delta = touch.position - initialTouchPos;
-                    RotateCamera(delta.x, 0);
-                    initialTouchPos = touch.position;
-                }
-                if (Input.touchCount == 2)
-                {
-                    if (touch.phase == TouchPhase.Stationary && isTouching)
-                    {
-                        // Move camera forward in the direction it's facing
-                        MoveCamera(Vector3.forward);
-                    }
-                }
-                if(Input.touchCount == 3)
-                {
-                    if (touch.phase == TouchPhase.Stationary && isTouching)
-                    {
-                        // Move camera forward in the direction it's facing
-                        MoveCamera(Vector3.back);
-                    }
-                }
-                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-                {
-                    isTouching = false;
-                }
-                
-            }
+#if ENABLE_INPUT_SYSTEM
+            HandleTouchInput_NewSystem();
+#elif ENABLE_LEGACY_INPUT_MANAGER
+            HandleTouchInput_Legacy();
+#endif
         }
-        // Handles keyboard and mouse input for desktop
+
+        #region NEW_INPUT_SYSTEM
+
+#if ENABLE_INPUT_SYSTEM
+        private void HandleTouchInput_NewSystem()
+        {
+            if (Touchscreen.current == null) return;
+
+            var touches = Touchscreen.current.touches;
+            int activeTouches = 0;
+
+            foreach (var touch in touches)
+            {
+                if (touch.press.isPressed)
+                    activeTouches++;
+            }
+
+            if (activeTouches == 0)
+            {
+                isTouching = false;
+                return;
+            }
+
+            var primaryTouch = Touchscreen.current.primaryTouch;
+
+            if (primaryTouch.press.wasPressedThisFrame)
+            {
+                isTouching = true;
+                initialTouchPos = primaryTouch.position.ReadValue();
+            }
+
+            if (primaryTouch.press.isPressed && isTouching)
+            {
+                Vector2 currentPos = primaryTouch.position.ReadValue();
+                Vector2 delta = currentPos - initialTouchPos;
+
+                RotateCamera(delta.x, 0);
+                initialTouchPos = currentPos;
+            }
+
+            if (activeTouches == 2)
+                MoveCamera(Vector3.forward);
+
+            if (activeTouches == 3)
+                MoveCamera(Vector3.back);
+        }
+#endif
+
+        #endregion
+
+        #region LEGACY_INPUT_SYSTEM
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        private void HandleTouchInput_Legacy()
+        {
+            if (Input.touchCount <= 0) return;
+
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                isTouching = true;
+                initialTouchPos = touch.position;
+            }
+
+            if (touch.phase == TouchPhase.Moved && isTouching)
+            {
+                Vector2 delta = touch.position - initialTouchPos;
+                RotateCamera(delta.x, 0);
+                initialTouchPos = touch.position;
+            }
+
+            if (Input.touchCount == 2 && touch.phase == TouchPhase.Stationary)
+                MoveCamera(Vector3.forward);
+
+            if (Input.touchCount == 3 && touch.phase == TouchPhase.Stationary)
+                MoveCamera(Vector3.back);
+
+            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                isTouching = false;
+        }
+#endif
+
+        #endregion
+
+        #endregion
+
+        #region MOUSE + KEYBOARD
+
         public virtual void HandleMouseKeyboardInput()
         {
-            // Keyboard movement (WASD or Arrow keys)
-            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            MoveCamera(move);
-            //Debug.Log("Move: " + move);
+#if ENABLE_INPUT_SYSTEM
+            HandleMouseKeyboard_NewSystem();
+#elif ENABLE_LEGACY_INPUT_MANAGER
+            HandleMouseKeyboard_Legacy();
+#endif
+        }
 
-            // Mouse rotation
-            if (Input.GetMouseButton(1)) // Right-click to rotate
+        #region NEW_INPUT_SYSTEM
+
+#if ENABLE_INPUT_SYSTEM
+        private void HandleMouseKeyboard_NewSystem()
+        {
+            if (Keyboard.current == null || Mouse.current == null) return;
+
+            Vector2 moveInput = Vector2.zero;
+
+            if (Keyboard.current.wKey.isPressed) moveInput.y += 1;
+            if (Keyboard.current.sKey.isPressed) moveInput.y -= 1;
+            if (Keyboard.current.aKey.isPressed) moveInput.x -= 1;
+            if (Keyboard.current.dKey.isPressed) moveInput.x += 1;
+
+            MoveCamera(new Vector3(moveInput.x, 0, moveInput.y));
+
+            if (Mouse.current.rightButton.isPressed)
+            {
+                Vector2 delta = Mouse.current.delta.ReadValue();
+                RotateCamera(delta.x, delta.y);
+            }
+        }
+#endif
+
+        #endregion
+
+        #region LEGACY_INPUT_SYSTEM
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        private void HandleMouseKeyboard_Legacy()
+        {
+            Vector3 move = new Vector3(
+                Input.GetAxis("Horizontal"),
+                0,
+                Input.GetAxis("Vertical"));
+
+            MoveCamera(move);
+
+            if (Input.GetMouseButton(1))
             {
                 float mouseX = Input.GetAxis("Mouse X");
                 float mouseY = Input.GetAxis("Mouse Y");
                 RotateCamera(mouseX, mouseY);
             }
         }
+#endif
 
-        // Moves the camera in a specific direction
+        #endregion
+
+        #endregion
+
+        #region CAMERA_MOVEMENT
+
         public virtual void MoveCamera(Vector3 direction)
         {
             LocalTransform.Translate(direction * movementSpeed * Time.deltaTime);
-            
         }
 
-        // Rotates the camera based on input
         public virtual void RotateCamera(float deltaX, float deltaY)
         {
             float rotationX = deltaX * rotationSpeed * Time.deltaTime;
             float rotationY = -deltaY * rotationSpeed * Time.deltaTime;
 
-            LocalTransform.Rotate(0, rotationX, 0); // Horizontal rotation (Y axis)
-            LocalTransform.Rotate(rotationY, 0, 0); // Vertical rotation (X axis)
+            LocalTransform.Rotate(0, rotationX, 0);
+            LocalTransform.Rotate(rotationY, 0, 0);
         }
 
-        // Checks if the touch/mouse position is within the defined RectTransform
-        /*
-        bool IsTouchWithinRect(Vector2 screenPosition)
-        {
-            Vector2 localPoint;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(touchRegionRect, screenPosition, mainCamera, out localPoint))
-            {
-                // Check if the local point is inside the rectangle
-                return touchRegionRect.rect.Contains(localPoint);
-            }
+        #endregion
 
-            return false;
-        }
-        */
-
-        public virtual void LateUpdate()
-        {
-            
-        }
+        public virtual void LateUpdate() { }
     }
 }
