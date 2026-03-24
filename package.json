@@ -1,10 +1,10 @@
 {
     "name": "com.fuzzphyte.ui",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "displayName": "FP User Interface",
     "description": "FP UI is a base class for UI Toolkit utilization and contains some useful methods",
-    "unity": "6000.0",
-    "unityRelease": "1f8",
+    "unity": "6000.4",
+    "unityRelease": "0f1",
     "documentationUrl": "https://github.com/jshull/FP_UI/README.md",
     "changelogUrl": "https://github.com/jshull/FP_UI/CHANGELOG.md",
     "licensesUrl": "https://github.com/jshull/FP_UI/LICENSE.md",

@@ -24,7 +24,7 @@ namespace FuzzPhyte.UI
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<FP_UI_InstructionMgr>();
+                    _instance = FindAnyObjectByType<FP_UI_InstructionMgr>();
                     if (_instance == null)
                     {
                         GameObject obj = new GameObject();

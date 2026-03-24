@@ -62,7 +62,7 @@ namespace FuzzPhyte.UI
             if (matchItem == null) return;
 
             // Check if item was already matched
-            var previousTargets = FindObjectsByType<FPUI_MatchTarget>(FindObjectsSortMode.InstanceID);
+            var previousTargets = FindObjectsByType<FPUI_MatchTarget>();
             for (int i = 0; i < previousTargets.Length; i++)
             { 
                 var target = previousTargets[i];

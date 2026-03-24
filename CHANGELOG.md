@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-03-24
+
+### 0.4.1 Changed
+
+- [@JShull](https://github.com/jshull)
+  - Unity 6.4 compatibility updates for obsolete object lookup APIs
+  - `FPUI_MatchManager.cs`
+    - Replaced deprecated `FindObjectsByType<T>(FindObjectsSortMode)` usage with `FindObjectsByType<T>()`
+  - `FP_UI_InstructionMgr.cs`
+    - Replaced deprecated singleton lookup calls with `FindAnyObjectByType<T>()`
+
 ## [0.4.0] - 2025-07-01
 
 ### 0.4.0 Added
